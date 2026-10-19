@@ -1,13 +1,24 @@
 package com.gestion.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("CLIENTE")
 public class Cliente extends Usuario {
 
     private Integer puntosFidelidad = 0;
 
-    // Un cliente puede tener múltiples solicitudes
+    /**
+     * Relación Cliente → Solicitudes (uno a muchos).
+     * Un cliente puede tener múltiples solicitudes.
+     * @JsonIgnore evita ciclos infinitos al convertir a JSON.
+     */
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Solicitud> solicitudes = new ArrayList<>();
 
     public Cliente() {

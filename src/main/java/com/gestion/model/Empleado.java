@@ -1,8 +1,14 @@
 package com.gestion.model;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("EMPLEADO")
 public class Empleado extends Usuario {
 
     private String cargo;
+
     private Double salario;
 
     public Empleado() {

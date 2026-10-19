@@ -1,31 +1,54 @@
 package com.gestion.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
-
+/**
+ * Solicitud de atención creada por un Cliente y gestionada por Empleados.
+ */
+@Entity
+@Table(name = "solicitudes")
 public class Solicitud {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String descripcion;
+
     // 1 = baja, 2 = media, 3 = alta
     private Integer prioridad = 1;
+
+    @Enumerated(EnumType.STRING)
     private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
+
     private LocalDateTime fechaCreacion;
 
-    // Cliente dueño de la solicitud
+    // Muchas solicitudes pertenecen a un cliente
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    @JsonIgnore
     private Cliente cliente;
 
     public Solicitud() {
-        this.fechaCreacion = LocalDateTime.now();
     }
 
     public Solicitud(String descripcion, Integer prioridad, Cliente cliente) {
         this.descripcion = descripcion;
         this.prioridad = prioridad;
         this.cliente = cliente;
-        this.fechaCreacion = LocalDateTime.now();
     }
 
+    @PrePersist
+    public void antesDeGuardar() {
+        if (fechaCreacion == null) {
+            fechaCreacion = LocalDateTime.now();
+        }
+    }
+
+    // Datos del cliente expuestos en el JSON sin causar ciclos
     public Long getClienteId() {
         return cliente != null ? cliente.getId() : null;
     }
