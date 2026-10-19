@@ -2,12 +2,12 @@ package com.gestion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-/**
- * Solicitud de atención creada por un Cliente y gestionada por Empleados.
- */
 @Entity
 @Table(name = "solicitudes")
 public class Solicitud {
@@ -16,9 +16,12 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
 
     // 1 = baja, 2 = media, 3 = alta
+    @Min(value = 1, message = "La prioridad mínima es 1")
+    @Max(value = 3, message = "La prioridad máxima es 3")
     private Integer prioridad = 1;
 
     @Enumerated(EnumType.STRING)

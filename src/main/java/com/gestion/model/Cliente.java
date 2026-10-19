@@ -2,6 +2,7 @@ package com.gestion.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +11,9 @@ import java.util.List;
 @DiscriminatorValue("CLIENTE")
 public class Cliente extends Usuario {
 
+    @Min(value = 0, message = "Los puntos de fidelidad no pueden ser negativos")
     private Integer puntosFidelidad = 0;
 
-    /**
-     * Relación Cliente → Solicitudes (uno a muchos).
-     * Un cliente puede tener múltiples solicitudes.
-     * @JsonIgnore evita ciclos infinitos al convertir a JSON.
-     */
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Solicitud> solicitudes = new ArrayList<>();

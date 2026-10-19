@@ -2,13 +2,19 @@ package com.gestion.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @DiscriminatorValue("EMPLEADO")
 public class Empleado extends Usuario {
 
+    @NotBlank(message = "El cargo no puede estar vacío")
     private String cargo;
 
+    @NotNull(message = "El salario es obligatorio")
+    @Positive(message = "El salario debe ser mayor que cero")
     private Double salario;
 
     public Empleado() {
