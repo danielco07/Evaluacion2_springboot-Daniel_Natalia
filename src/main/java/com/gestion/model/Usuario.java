@@ -1,11 +1,17 @@
 package com.gestion.model;
 
-/**
- * Clase base de todos los usuarios del sistema.
- * Encapsulación: los atributos son privados y se accede
- * a ellos solo mediante getters y setters.
- */
-public class Usuario {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "tipo")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Administrador.class, name = "ADMINISTRADOR"),
+        @JsonSubTypes.Type(value = Empleado.class, name = "EMPLEADO"),
+        @JsonSubTypes.Type(value = Cliente.class, name = "CLIENTE")
+})
+public abstract class Usuario {
 
     private Long id;
     private String nombre;
@@ -20,6 +26,9 @@ public class Usuario {
         this.nombre = nombre;
         this.correo = correo;
     }
+
+    @JsonProperty(value = "descripcion", access = JsonProperty.Access.READ_ONLY)
+    public abstract String obtenerDescripcion();
 
     // Getters y Setters
     public Long getId() {

@@ -2,10 +2,7 @@ package com.gestion.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Solicitud de atención que crea un cliente
- * y que es gestionada por los empleados.
- */
+
 public class Solicitud {
 
     private Long id;
@@ -15,14 +12,26 @@ public class Solicitud {
     private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
     private LocalDateTime fechaCreacion;
 
+    // Cliente dueño de la solicitud
+    private Cliente cliente;
+
     public Solicitud() {
         this.fechaCreacion = LocalDateTime.now();
     }
 
-    public Solicitud(String descripcion, Integer prioridad) {
+    public Solicitud(String descripcion, Integer prioridad, Cliente cliente) {
         this.descripcion = descripcion;
         this.prioridad = prioridad;
+        this.cliente = cliente;
         this.fechaCreacion = LocalDateTime.now();
+    }
+
+    public Long getClienteId() {
+        return cliente != null ? cliente.getId() : null;
+    }
+
+    public String getClienteNombre() {
+        return cliente != null ? cliente.getNombre() : null;
     }
 
     public Long getId() {
@@ -63,6 +72,14 @@ public class Solicitud {
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     @Override
