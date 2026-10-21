@@ -15,7 +15,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class ManejadorErrores {
 
-    // 400: errores de validación (@NotBlank, @Email, @Min, @Max, @Positive...)
+    // 400: errores de validación
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> manejarValidacion(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new LinkedHashMap<>();

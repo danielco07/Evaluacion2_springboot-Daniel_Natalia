@@ -16,32 +16,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/solicitudes")
 public class SolicitudController {
-
     private final SolicitudService solicitudService;
 
     public SolicitudController(SolicitudService solicitudService) {
         this.solicitudService = solicitudService;
     }
 
-    // POST /solicitudes
     @PostMapping
     public ResponseEntity<Solicitud> crear(@Valid @RequestBody SolicitudRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitudService.crear(request));
     }
 
-    // GET /solicitudes
     @GetMapping
     public List<Solicitud> listar() {
         return solicitudService.listar();
     }
 
-    // GET /solicitudes/{id}
     @GetMapping("/{id}")
     public Solicitud buscarPorId(@PathVariable Long id) {
         return solicitudService.buscarPorId(id);
     }
 
-    // GET /solicitudes/paginado?pagina=0&tamano=5&ordenarPor=prioridad&direccion=desc
     @GetMapping("/paginado")
     public Page<Solicitud> listarPaginado(@RequestParam(defaultValue = "0") int pagina,
                                           @RequestParam(defaultValue = "5") int tamano,
@@ -51,5 +46,36 @@ public class SolicitudController {
                 ? Sort.by(ordenarPor).descending()
                 : Sort.by(ordenarPor).ascending();
         return solicitudService.listarPaginado(PageRequest.of(pagina, tamano, orden));
+    }
+
+    @GetMapping("/cola")
+    public List<Solicitud> verCola() {
+        return solicitudService.verCola();
+    }
+
+    @PostMapping("/procesar")
+    public Solicitud procesarSiguiente() {
+        return solicitudService.procesarSiguiente();
+    }
+
+    @PostMapping("/procesar-todas")
+    public List<Solicitud> procesarTodas() {
+        return solicitudService.procesarTodas();
+    }
+
+    @GetMapping("/historial")
+    public List<Solicitud> verHistorial() {
+        return solicitudService.verHistorial();
+    }
+
+    @GetMapping("/ordenadas")
+    public List<Solicitud> ordenadasPorPrioridad() {
+        return solicitudService.ordenadasPorPrioridad();
+    }
+
+    @GetMapping("/buscar/{id}")
+    public Solicitud buscarEnGestor(@PathVariable Long id,
+                                    @RequestParam(defaultValue = "binaria") String metodo) {
+        return solicitudService.buscarEnGestor(id, metodo);
     }
 }
